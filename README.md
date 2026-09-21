@@ -1,3 +1,9 @@
+index.html
+netlify.toml
+netlify/
+  functions/
+    chat.js
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
