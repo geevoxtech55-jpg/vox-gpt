@@ -1,417 +1,535 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vox-GPT 8.0.0 — GEE VOX TECH</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VOX-GPT — GEE VOX TECH</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
 
-    :root {
-      --bg: #05050a;
-      --panel: #0d0d17;
-      --panel2: #11111f;
-      --border: #24243d;
-      --cyan: #00f0ff;
-      --magenta: #ff00e5;
-      --green: #00ff88;
-      --text: #eeeeff;
-      --dim: #8585a8;
-    }
+:root{
+  --bg:#050509;
+  --card:#0d0d15;
+  --card2:#12121d;
+  --line:#252538;
+  --cyan:#00eaff;
+  --purple:#9d4edd;
+  --text:#f5f5ff;
+  --muted:#88889f;
+}
 
-    body {
-      min-height: 100vh;
-      background:
-        radial-gradient(circle at 15% 20%, #00f0ff12, transparent 35%),
-        radial-gradient(circle at 85% 80%, #ff00e512, transparent 35%),
-        var(--bg);
-      color: var(--text);
-      font-family: Arial, sans-serif;
-    }
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(circle at top,#10152b 0%,#050509 45%);
+  color:var(--text);
+  font-family:Arial,sans-serif;
+}
 
-    header {
-      padding: 22px 15px;
-      text-align: center;
-      border-bottom: 1px solid var(--border);
-      background: #080811dd;
-      backdrop-filter: blur(10px);
-    }
+/* HEADER */
 
-    .logo {
-      font-size: 28px;
-      font-weight: 800;
-      color: var(--cyan);
-      text-shadow: 0 0 15px var(--cyan);
-    }
+header{
+  padding:28px 18px 22px;
+  text-align:center;
+}
 
-    .logo span {
-      color: var(--magenta);
-    }
+.brand{
+  font-size:30px;
+  font-weight:900;
+  letter-spacing:2px;
+  color:white;
+}
 
-    .status {
-      margin-top: 8px;
-      color: var(--green);
-      font-size: 13px;
-    }
+.brand span{
+  color:var(--cyan);
+}
 
-    main {
-      width: min(1100px, 94%);
-      margin: 25px auto;
-    }
+.subtitle{
+  margin-top:8px;
+  color:var(--muted);
+  font-size:13px;
+  letter-spacing:1px;
+}
 
-    .modules {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 12px;
-      margin-bottom: 22px;
-    }
+/* MODULES */
 
-    .module {
-      background: linear-gradient(145deg, var(--panel), var(--panel2));
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 17px 10px;
-      text-align: center;
-      cursor: pointer;
-      transition: .2s;
-    }
+.modules{
+  width:min(1000px,94%);
+  margin:10px auto 25px;
 
-    .module:hover {
-      border-color: var(--cyan);
-      transform: translateY(-3px);
-      box-shadow: 0 0 18px #00f0ff20;
-    }
+  display:grid;
+  grid-template-columns:
+    repeat(auto-fit,minmax(145px,1fr));
 
-    .module .icon {
-      font-size: 25px;
-      margin-bottom: 7px;
-    }
+  gap:12px;
+}
 
-    .module small {
-      color: var(--dim);
-    }
+.module{
+  min-height:105px;
 
-    .chat {
-      background: #0a0a12ee;
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      overflow: hidden;
-    }
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
 
-    .messages {
-      height: 430px;
-      overflow-y: auto;
-      padding: 18px;
-    }
+  background:
+    linear-gradient(145deg,var(--card),var(--card2));
 
-    .message {
-      max-width: 85%;
-      padding: 13px 15px;
-      margin-bottom: 13px;
-      border-radius: 14px;
-      line-height: 1.5;
-      white-space: pre-wrap;
-    }
+  border:1px solid var(--line);
+  border-radius:18px;
 
-    .bot {
-      background: var(--panel2);
-      border: 1px solid var(--border);
-      margin-right: auto;
-    }
+  cursor:pointer;
+  transition:.2s;
+}
 
-    .user {
-      background: #073c45;
-      border: 1px solid #00f0ff55;
-      margin-left: auto;
-    }
+.module:hover{
+  border-color:var(--cyan);
+  transform:translateY(-3px);
+}
 
-    .input-area {
-      display: flex;
-      gap: 10px;
-      padding: 13px;
-      border-top: 1px solid var(--border);
-      background: var(--panel);
-    }
+.icon{
+  font-size:27px;
+  margin-bottom:9px;
+}
 
-    textarea {
-      flex: 1;
-      resize: none;
-      height: 55px;
-      padding: 14px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      background: #05050a;
-      color: white;
-      outline: none;
-      font-size: 15px;
-    }
+.module b{
+  font-size:14px;
+}
 
-    textarea:focus {
-      border-color: var(--cyan);
-    }
+.module small{
+  margin-top:5px;
+  color:var(--muted);
+}
 
-    button {
-      border: 0;
-      border-radius: 12px;
-      padding: 0 20px;
-      background: var(--cyan);
-      color: #001014;
-      font-weight: 800;
-      cursor: pointer;
-    }
+/* CHAT */
 
-    button:disabled {
-      opacity: .5;
-      cursor: not-allowed;
-    }
+.chat{
+  width:min(1000px,94%);
+  margin:auto;
 
-    .footer {
-      text-align: center;
-      color: var(--dim);
-      padding: 20px;
-      font-size: 12px;
-    }
+  background:#08080e;
 
-    @media (max-width: 600px) {
-      .logo {
-        font-size: 22px;
-      }
+  border:1px solid var(--line);
+  border-radius:22px;
 
-      .messages {
-        height: 55vh;
-      }
+  overflow:hidden;
+}
 
-      .input-area {
-        flex-direction: column;
-      }
+.messages{
+  height:430px;
+  overflow-y:auto;
+  padding:18px;
+}
 
-      button {
-        height: 48px;
-      }
-    }
-  </style>
+.message{
+  max-width:85%;
+  margin-bottom:14px;
+
+  padding:13px 16px;
+
+  border-radius:16px;
+
+  line-height:1.5;
+
+  white-space:pre-wrap;
+}
+
+.bot{
+  background:var(--card);
+  border:1px solid var(--line);
+}
+
+.user{
+  margin-left:auto;
+
+  background:#063b43;
+
+  border:1px solid #00eaff55;
+}
+
+/* INPUT */
+
+.input-area{
+  display:flex;
+  gap:10px;
+
+  padding:14px;
+
+  border-top:1px solid var(--line);
+  background:#0b0b12;
+}
+
+textarea{
+  flex:1;
+
+  min-height:52px;
+  max-height:130px;
+
+  resize:none;
+
+  padding:15px;
+
+  border-radius:14px;
+
+  border:1px solid var(--line);
+
+  background:#050509;
+
+  color:white;
+
+  outline:none;
+
+  font-size:15px;
+}
+
+textarea:focus{
+  border-color:var(--cyan);
+}
+
+button{
+  min-width:110px;
+
+  border:0;
+  border-radius:14px;
+
+  background:var(--cyan);
+
+  color:#001014;
+
+  font-weight:900;
+
+  cursor:pointer;
+}
+
+button:disabled{
+  opacity:.5;
+}
+
+/* FOOTER */
+
+footer{
+  text-align:center;
+
+  padding:25px 10px;
+
+  color:var(--muted);
+
+  font-size:12px;
+}
+
+/* MOBILE */
+
+@media(max-width:600px){
+
+  header{
+    padding-top:22px;
+  }
+
+  .brand{
+    font-size:24px;
+  }
+
+  .modules{
+    grid-template-columns:
+      repeat(2,1fr);
+  }
+
+  .module{
+    min-height:100px;
+  }
+
+  .messages{
+    height:52vh;
+  }
+
+  .input-area{
+    flex-direction:column;
+  }
+
+  button{
+    height:48px;
+  }
+
+}
+</style>
 </head>
 
 <body>
 
 <header>
-  <div class="logo">⚡ VOX-GPT <span>8.0.0</span></div>
-  <div>GEE VOX TECH</div>
-  <div class="status">● SYSTÈME EN LIGNE</div>
+  <div class="brand">
+    GEE <span>VOX</span>
+  </div>
+
+  <div class="subtitle">
+    VOX-GPT
+  </div>
 </header>
 
-<main>
 
-  <section class="modules">
+<section class="modules">
 
-    <div class="module" onclick="moduleClick('Intelligence')">
-      <div class="icon">🧠</div>
-      <b>Intelligence</b><br>
-      <small>IA avancée</small>
+  <div class="module" onclick="useModule('Intelligence')">
+    <div class="icon">🧠</div>
+    <b>Intelligence</b>
+    <small>IA</small>
+  </div>
+
+  <div class="module" onclick="useModule('Recherche')">
+    <div class="icon">🔎</div>
+    <b>Recherche</b>
+    <small>Infos</small>
+  </div>
+
+  <div class="module" onclick="useModule('Programmation')">
+    <div class="icon">💻</div>
+    <b>Programmation</b>
+    <small>Code</small>
+  </div>
+
+  <div class="module" onclick="useModule('Documents')">
+    <div class="icon">📄</div>
+    <b>Documents</b>
+    <small>Analyse</small>
+  </div>
+
+  <div class="module" onclick="useModule('Vision')">
+    <div class="icon">👁️</div>
+    <b>Vision</b>
+    <small>Images</small>
+  </div>
+
+  <div class="module" onclick="useModule('Création')">
+    <div class="icon">🎨</div>
+    <b>Création</b>
+    <small>Contenu</small>
+  </div>
+
+  <div class="module" onclick="useModule('Voix')">
+    <div class="icon">🎙️</div>
+    <b>Voix</b>
+    <small>Audio</small>
+  </div>
+
+  <div class="module" onclick="useModule('Données')">
+    <div class="icon">📊</div>
+    <b>Données</b>
+    <small>Analyse</small>
+  </div>
+
+  <div class="module" onclick="useModule('Agents')">
+    <div class="icon">🤖</div>
+    <b>Agents</b>
+    <small>Actions</small>
+  </div>
+
+  <div class="module" onclick="useModule('Sécurité')">
+    <div class="icon">🔐</div>
+    <b>Sécurité</b>
+    <small>Protection</small>
+  </div>
+
+  <div class="module" onclick="useModule('Mémoire')">
+    <div class="icon">💾</div>
+    <b>Mémoire</b>
+    <small>Contexte</small>
+  </div>
+
+  <div class="module" onclick="useModule('Applications')">
+    <div class="icon">📱</div>
+    <b>Applications</b>
+    <small>Apps</small>
+  </div>
+
+</section>
+
+
+<section class="chat">
+
+  <div class="messages" id="messages">
+
+    <div class="message bot">
+      Bienvenue sur VOX-GPT.
+
+      Je suis prêt. Que veux-tu faire ?
     </div>
 
-    <div class="module" onclick="moduleClick('Recherche')">
-      <div class="icon">🔎</div>
-      <b>Recherche</b><br>
-      <small>Informations</small>
-    </div>
+  </div>
 
-    <div class="module" onclick="moduleClick('Programmation')">
-      <div class="icon">💻</div>
-      <b>Programmation</b><br>
-      <small>Code</small>
-    </div>
 
-    <div class="module" onclick="moduleClick('Documents')">
-      <div class="icon">📄</div>
-      <b>Documents</b><br>
-      <small>Analyse</small>
-    </div>
+  <div class="input-area">
 
-    <div class="module" onclick="moduleClick('Vision')">
-      <div class="icon">👁️</div>
-      <b>Vision</b><br>
-      <small>Images</small>
-    </div>
+    <textarea
+      id="input"
+      placeholder="Écris ton message..."
+    ></textarea>
 
-    <div class="module" onclick="moduleClick('Création')">
-      <div class="icon">🎨</div>
-      <b>Création</b><br>
-      <small>Contenu</small>
-    </div>
+    <button
+      id="send"
+      onclick="sendMessage()"
+    >
+      ENVOYER
+    </button>
 
-    <div class="module" onclick="moduleClick('Voix')">
-      <div class="icon">🎙️</div>
-      <b>Voix / Audio</b><br>
-      <small>Audio</small>
-    </div>
+  </div>
 
-    <div class="module" onclick="moduleClick('Données')">
-      <div class="icon">📊</div>
-      <b>Données</b><br>
-      <small>Analyse</small>
-    </div>
+</section>
 
-    <div class="module" onclick="moduleClick('Agents')">
-      <div class="icon">🤖</div>
-      <b>Agents</b><br>
-      <small>Automatisation</small>
-    </div>
 
-    <div class="module" onclick="moduleClick('API')">
-      <div class="icon">🔌</div>
-      <b>API</b><br>
-      <small>Intégration</small>
-    </div>
+<footer>
+  GEE VOX TECH © 2026
+</footer>
 
-    <div class="module" onclick="moduleClick('Sécurité')">
-      <div class="icon">🔐</div>
-      <b>Sécurité</b><br>
-      <small>Protection</small>
-    </div>
-
-    <div class="module" onclick="moduleClick('Mémoire')">
-      <div class="icon">💾</div>
-      <b>Mémoire</b><br>
-      <small>Contexte</small>
-    </div>
-
-    <div class="module" onclick="moduleClick('Applications')">
-      <div class="icon">📱</div>
-      <b>Applications</b><br>
-      <small>Apps</small>
-    </div>
-
-    <div class="module" onclick="moduleClick('Architecture')">
-      <div class="icon">⚙️</div>
-      <b>Architecture</b><br>
-      <small>Système</small>
-    </div>
-
-  </section>
-
-  <section class="chat">
-
-    <div class="messages" id="messages">
-      <div class="message bot">
-        ⚡ Bienvenue sur VOX-GPT 8.0.0.
-
-        Je suis l'assistant IA de GEE VOX TECH.
-
-        Pose-moi une question pour commencer.
-      </div>
-    </div>
-
-    <div class="input-area">
-      <textarea
-        id="input"
-        placeholder="Écris ton message..."
-        onkeydown="handleKey(event)"
-      ></textarea>
-
-      <button id="sendBtn" onclick="sendMessage()">
-        ENVOYER
-      </button>
-    </div>
-
-  </section>
-
-</main>
-
-<div class="footer">
-  © 2026 GEE VOX TECH — VOX-GPT
-</div>
 
 <script>
-  const input = document.getElementById("input");
-  const messages = document.getElementById("messages");
-  const sendBtn = document.getElementById("sendBtn");
 
-  function addMessage(text, type) {
-    const div = document.createElement("div");
-    div.className = "message " + type;
-    div.textContent = text;
+const input = document.getElementById("input");
+const messages = document.getElementById("messages");
+const send = document.getElementById("send");
 
-    messages.appendChild(div);
-    messages.scrollTop = messages.scrollHeight;
-  }
 
-  async function sendMessage() {
-    const text = input.value.trim();
+function addMessage(text,type){
 
-    if (!text || sendBtn.disabled) return;
+  const box = document.createElement("div");
 
-    addMessage(text, "user");
+  box.className =
+    "message " + type;
 
-    input.value = "";
-    sendBtn.disabled = true;
-    sendBtn.textContent = "⏳";
+  box.textContent = text;
 
-    const loading = document.createElement("div");
-    loading.className = "message bot";
-    loading.id = "loading";
-    loading.textContent = "VOX-GPT réfléchit...";
-    messages.appendChild(loading);
-    messages.scrollTop = messages.scrollHeight;
+  messages.appendChild(box);
 
-    try {
-      const response = await fetch("/.netlify/functions/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          message: text
-        })
-      });
+  messages.scrollTop =
+    messages.scrollHeight;
+}
 
-      const data = await response.json();
 
-      loading.remove();
+async function sendMessage(){
 
-      if (!response.ok) {
-        addMessage(
-          "❌ Erreur : " + (data.error || "Erreur du serveur"),
-          "bot"
-        );
-        return;
-      }
+  const text =
+    input.value.trim();
 
-      addMessage(data.text || "Aucune réponse reçue.", "bot");
+  if(!text) return;
 
-    } catch (error) {
-      loading.remove();
+  addMessage(text,"user");
+
+  input.value="";
+
+  send.disabled=true;
+
+  send.textContent="...";
+
+
+  const loading =
+    document.createElement("div");
+
+  loading.className="message bot";
+
+  loading.textContent=
+    "VOX-GPT réfléchit...";
+
+  messages.appendChild(loading);
+
+
+  try{
+
+    const response =
+      await fetch(
+        "/.netlify/functions/chat",
+        {
+          method:"POST",
+
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+
+          body:JSON.stringify({
+            message:text
+          })
+        }
+      );
+
+
+    const data =
+      await response.json();
+
+
+    loading.remove();
+
+
+    if(!response.ok){
 
       addMessage(
-        "❌ Impossible de contacter le serveur Netlify.",
+        "❌ " +
+        (data.error ||
+        "Erreur du serveur"),
         "bot"
       );
 
-      console.error(error);
-
-    } finally {
-      sendBtn.disabled = false;
-      sendBtn.textContent = "ENVOYER";
+      return;
     }
+
+
+    addMessage(
+      data.text ||
+      "Aucune réponse.",
+      "bot"
+    );
+
+
+  }catch(error){
+
+    loading.remove();
+
+    addMessage(
+      "❌ Impossible de contacter Netlify.",
+      "bot"
+    );
+
   }
 
-  function moduleClick(name) {
-    input.value = "Explique-moi le module " + name + " et montre-moi comment l'utiliser.";
-    input.focus();
-  }
 
-  function handleKey(event) {
-    if (event.key === "Enter" && !event.shiftKey) {
+  send.disabled=false;
+
+  send.textContent="ENVOYER";
+}
+
+
+function useModule(name){
+
+  input.value =
+    "Utilise le module " +
+    name +
+    " pour m'aider.";
+
+  input.focus();
+}
+
+
+input.addEventListener(
+  "keydown",
+  function(event){
+
+    if(
+      event.key==="Enter" &&
+      !event.shiftKey
+    ){
+
       event.preventDefault();
+
       sendMessage();
     }
+
   }
+);
+
 </script>
 
 </body>
-      </html>
+  </html>
